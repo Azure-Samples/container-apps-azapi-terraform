@@ -171,7 +171,7 @@ As you can see, the module uses an [azapi_resource](https://docs.microsoft.com/e
 
 - New preview service
 - New feature added to existing service
-- Existing feature / service not currently covered
+- Existing feature or service not currently supported by the AzureRM provider
 
 For more information, see [Overview of the Terraform AzAPI provider](https://docs.microsoft.com/en-us/azure/developer/terraform/overview-azapi-provider).
 
