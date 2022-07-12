@@ -175,9 +175,9 @@ As you can see, the module uses an [azapi_resource](https://docs.microsoft.com/e
 
 For more information, see [Overview of the Terraform AzAPI provider](https://docs.microsoft.com/en-us/azure/developer/terraform/overview-azapi-provider).
 
-## Deploy the sample.
+## Deploy the sample
 
-You can use the `deploy.sh` bash script to deploy the sample:
+All the resources deployed by the modules share the same name prefix. Make sure to configure a name prefix by setting a value for the `resource_prefix` variable defined in the `variables.tf` file. If you set the value of the `resource_prefix` variable to an empty string, the `main.tf` module will use a `random_string` resource to automatically create a name prefix for the Azure resources. You can use the `deploy.sh` bash script to deploy the sample:
 
 ```bash
 #!/bin/bash
