@@ -67,7 +67,7 @@ This sample contains Terraform modules to create the following resources:
 - [Microsoft.App/managedEnvironments/daprComponents](https://docs.microsoft.com/en-us/azure/templates/microsoft.app/managedenvironments/daprcomponents): a [state management Dapr component](https://docs.dapr.io/developing-applications/building-blocks/state-management/state-management-overview/) that hosts the orders created by the service application.
 - [Microsoft.App/containerApps](https://docs.microsoft.com/en-us/azure/templates/microsoft.app/containerapps): two dapr-enabled Container Apps: [hello-k8s-node](https://hub.docker.com/r/dapriosamples/hello-k8s-node) and [hello-k8s-python](https://hub.docker.com/r/dapriosamples/hello-k8s-python)
 
-The following table contains the code of the `modules/contains_apps/main.tf` Terraform module used to create the Azure Container Apps environment, Dapr components, and Container Apps
+The following table contains the code of the `modules/contains_apps/main.tf` Terraform module used to create the Azure Container Apps environment, Dapr components, and Container Apps.
 
 ```terraform
 terraform {
@@ -175,7 +175,7 @@ As you can see, the module uses an [azapi_resource](https://docs.microsoft.com/e
 
 For more information, see [Overview of the Terraform AzAPI provider](https://docs.microsoft.com/en-us/azure/developer/terraform/overview-azapi-provider).
 
-## Deploy
+## Deploy the sample.
 
 You can use the `deploy.sh` bash script to deploy the sample:
 
@@ -232,7 +232,7 @@ ContainerAppConsoleLogs_CL
 | order by TimeGenerated desc
 ```
 
-The following images shows the the type of response to expect from the command.
+The following images shows the type of response to expect from the command.
 
 ![Logs](./images/logs.png)
 
