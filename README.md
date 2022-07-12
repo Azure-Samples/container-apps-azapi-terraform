@@ -232,7 +232,7 @@ ContainerAppConsoleLogs_CL
 | order by TimeGenerated desc
 ```
 
-The following images shows the the type of response to expect from the command.
+The following images shows the type of response to expect from the command.
 
 ![Logs](./images/logs.png)
 
