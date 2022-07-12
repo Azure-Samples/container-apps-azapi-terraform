@@ -251,4 +251,5 @@ Since `pythonapp` continuously makes calls to `nodeapp` with messages that get p
 
 - [Azure Container Apps overview](https://docs.microsoft.com/en-us/azure/container-apps/overview)
 - [Tutorial: Deploy a Dapr application to Azure Container Apps with an Azure Resource Manager or Bicep template](https://docs.microsoft.com/en-us/azure/container-apps/microservices-dapr-azure-resource-manager?tabs=bash&pivots=container-apps-bicep)
-[AzAPI provider](https://docs.microsoft.com/en-us/azure/developer/terraform/overview-azapi-provider)
+- [AzAPI provider](https://docs.microsoft.com/en-us/azure/developer/terraform/overview-azapi-provider)
+- [Announcing Azure Terrafy and AzAPI Terraform Provider Previews](https://techcommunity.microsoft.com/t5/azure-tools-blog/announcing-azure-terrafy-and-azapi-terraform-provider-previews/ba-p/3270937)
