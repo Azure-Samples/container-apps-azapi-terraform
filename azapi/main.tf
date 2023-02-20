@@ -3,16 +3,20 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.43.0"
+      version = "3.3.0"
+    }
+    azapi = {
+      source  = "Azure/azapi"
     }
   }
+  experiments = [module_variable_optional_attrs]
 }
 
 provider "azurerm" {
   features {}
 }
 
-data "azurerm_client_config" "current" {
+provider "azapi" {
 }
 
 resource "random_string" "resource_prefix" {
@@ -46,58 +50,6 @@ module "application_insights" {
   workspace_id                     = module.log_analytics_workspace.id
 }
 
-module "virtual_network" {
-  source                           = "./modules/virtual_network"
-  resource_group_name              = azurerm_resource_group.rg.name
-  vnet_name                        = "${var.resource_prefix != "" ? var.resource_prefix : random_string.resource_prefix.result}${var.vnet_name}"
-  location                         = var.location
-  address_space                    = var.vnet_address_space
-  tags                             = var.tags
-  log_analytics_workspace_id       = module.log_analytics_workspace.id
-  log_analytics_retention_days     = var.log_analytics_retention_days
-
-  subnets = [
-    {
-      name : var.aca_subnet_name
-      address_prefixes : var.aca_subnet_address_prefix
-      private_endpoint_network_policies_enabled : true
-      private_link_service_network_policies_enabled : false
-    },
-    {
-      name : var.private_endpoint_subnet_name
-      address_prefixes : var.private_endpoint_subnet_address_prefix
-      private_endpoint_network_policies_enabled : true
-      private_link_service_network_policies_enabled : false
-    }
-  ]
-}
-
-module "blob_private_dns_zone" {
-  source                       = "./modules/private_dns_zone"
-  name                         = "privatelink.blob.core.windows.net"
-  resource_group_name          = azurerm_resource_group.rg.name
-  virtual_networks_to_link     = {
-    (module.virtual_network.name) = {
-      subscription_id = data.azurerm_client_config.current.subscription_id
-      resource_group_name = azurerm_resource_group.rg.name
-    }
-  }
-}
-
-module "blob_private_endpoint" {
-  source                         = "./modules/private_endpoint"
-  name                           = "${title(module.storage_account.name)}PrivateEndpoint"
-  location                       = var.location
-  resource_group_name            = azurerm_resource_group.rg.name
-  subnet_id                      = module.virtual_network.subnet_ids[var.private_endpoint_subnet_name]
-  tags                           = var.tags
-  private_connection_resource_id = module.storage_account.id
-  is_manual_connection           = false
-  subresource_name               = "blob"
-  private_dns_zone_group_name    = "BlobPrivateDnsZoneGroup"
-  private_dns_zone_group_ids     = [module.blob_private_dns_zone.id]
-}
-
 module "storage_account" {
   source                           = "./modules/storage_account"
   name                             = lower("${var.resource_prefix != "" ? var.resource_prefix : random_string.resource_prefix.result}${var.storage_account_name}")
@@ -109,22 +61,22 @@ module "storage_account" {
   replication_type                 = var.storage_account_replication_type
 }
 
-module "container_apps" {
+module "container_app" {
   source                           = "./modules/container_apps"
   managed_environment_name         = "${var.resource_prefix != "" ? var.resource_prefix : random_string.resource_prefix.result}${var.managed_environment_name}"
   location                         = var.location
-  resource_group_name              = azurerm_resource_group.rg.name
+  resource_group_id                = azurerm_resource_group.rg.id
   tags                             = var.tags
-  infrastructure_subnet_id         = module.virtual_network.subnet_ids[var.aca_subnet_name] 
   instrumentation_key              = module.application_insights.instrumentation_key
-  workspace_id                     = module.log_analytics_workspace.id
+  workspace_id                     = module.log_analytics_workspace.workspace_id
+  primary_shared_key               = module.log_analytics_workspace.primary_shared_key
   dapr_components                  = [{
-                                      name            = var.dapr_name
-                                      component_type  = var.dapr_component_type
-                                      version         = var.dapr_version
-                                      ignore_errors   = var.dapr_ignore_errors
-                                      init_timeout    = var.dapr_init_timeout
-                                      secret          = [
+                                      name            = var.dapr_component_name
+                                      componentType   = var.dapr_component_type
+                                      version         = var.dapr_component_version
+                                      ignoreErrors    = var.dapr_ignore_errors
+                                      initTimeout     = var.dapr_component_init_timeout
+                                      secrets         = [
                                         {
                                           name        = "storageaccountkey"
                                           value       = module.storage_account.primary_access_key
@@ -141,10 +93,10 @@ module "container_apps" {
                                         },
                                         {
                                           name        = "accountKey"
-                                          secret_name = "storageaccountkey"
+                                          secretRef   = "storageaccountkey"
                                         }
                                       ]
-                                      scopes          = var.dapr_scopes
+                                      scopes          = var.dapr_component_scopes
                                      }]
   container_apps                   = var.container_apps
 }
