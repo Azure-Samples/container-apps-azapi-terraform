@@ -16,12 +16,12 @@ products:
 - azure-log-analytics
 - azure-application-insights
 
-name:  Deploy a Dapr application to Azure Container Apps with Terraform and AzAPI Provider
+name:  Deploy a Dapr application to Azure Container Apps with Terraform
 description: This sample shows how to deploy a Dapr application to Azure Container Apps using Terraform modules and the AzAPI Provider.
 urlFragment: container-apps-azapi-terraform
 ---
 
-# Deploy a Dapr application to Azure Container Apps with Terraform and AzAPI Provider
+# Deploy a Dapr application to Azure Container Apps with Terraform
 
 [Dapr](https://dapr.io/) (Distributed Application Runtime) is a runtime that helps you build resilient stateless and stateful microservices. This sample shows how to deploy a [Dapr](https://dapr.io/) application to [Azure Container Apps](https://docs.microsoft.com/en-us/azure/container-apps/overview) using Terraform modules with the [Azure Provider](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs) and [AzAPI Provider](https://registry.terraform.io/providers/azure/azapi/latest/docs) Terraform Providers instead of an Azure Resource Manager (ARM) or Bicep template like in the original sample [Tutorial: Deploy a Dapr application to Azure Container Apps with an Azure Resource Manager or Bicep template](https://docs.microsoft.com/en-us/azure/container-apps/microservices-dapr-azure-resource-manager?tabs=bash&pivots=container-apps-bicep).
 
